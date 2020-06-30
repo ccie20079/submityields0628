@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:background="@color/skyblue">
+
+    <TextView
+        android:id="@+id/line_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:layout_marginLeft="9dp"
+        android:textSize="15sp"
+        android:text="测试"
+        android:gravity="center_vertical"
+        ></TextView>
+    <TextView
+        android:id="@+id/monitor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textSize="15sp"
+        android:layout_marginRight="5dp"
+        android:text="测试"
+        android:gravity="center_vertical"></TextView>
+</LinearLayout>

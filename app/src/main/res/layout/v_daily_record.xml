@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <!--序号，线体，工位，工序，金额，数量，时间字符串-->
+    <!--seq_of_the_specific_process  ,line_name,station_name  , specific_process , amount_of_money ,inserted_time-->
+    <TextView
+        android:id="@+id/seq_of_the_specific_process"
+        android:layout_width="0dp"
+        android:layout_weight="6"
+        android:layout_height="wrap_content"
+
+        android:text="119"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/line_name"
+        android:layout_width="0dp"
+        android:layout_weight="9"
+        android:layout_height="wrap_content"
+        android:text="测试线"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/station_name"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/specific_process"
+        android:layout_width="0dp"
+        android:layout_weight="55"
+        android:layout_height="wrap_content"
+        android:text="工序"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/amount_of_money"
+        android:layout_width="0dp"
+        android:layout_weight="8"
+        android:layout_height="wrap_content"
+        android:text="13.33"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/time_str_of_the_client"
+        android:layout_width="0dp"
+        android:layout_weight="19"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="200621155200"
+        android:textSize="13sp" />
+</LinearLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <item android:id="@+id/add_name_of_emps_to_calc_num_units"
+        android:title="新增员工"></item>
+</menu>
