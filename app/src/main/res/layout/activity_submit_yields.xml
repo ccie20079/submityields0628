@@ -14,17 +14,26 @@
                 android:id="@+id/btnToChoosePNInfo"
                 android:layout_width="41dp"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:gravity="bottom"
                 android:layout_marginLeft="7dp"
                 android:background="@drawable/left_arrow" />
             <TextView
-                android:id="@+id/textViewOfProductsName"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_productOrder"
+                android:layout_width="0dp"
+                android:layout_weight="70"
                 android:layout_height="match_parent"
                 android:text="工单"
-                android:textSize="17sp"
-                android:gravity="center"
-                android:textAlignment="center"
+                android:textSize="13sp"
+                android:gravity="right|bottom"
+                  />
+            <TextView
+                android:id="@+id/tv_styleName"
+                android:layout_width="0dp"
+                android:layout_weight="30"
+                android:layout_height="match_parent"
+                android:text="款式"
+                android:textSize="10sp"
+                android:gravity="right|bottom"
                 />
         </LinearLayout>
         <LinearLayout

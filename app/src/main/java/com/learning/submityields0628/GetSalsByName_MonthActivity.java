@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -56,7 +57,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
 
     TextView tv_amount_of_money_piecework_detail;
     TextView tv_amount_of_money_odd_detail;
-    TextView tv_downloadSalsExcelByName_MonthAction;
+    TextView btn_downloadSalsExcelByName_MonthAction;
     TextView tv_of_result;
     TextView tv_back_to_MainActivity;
 
@@ -78,7 +79,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
         tv_total_sals= (TextView)findViewById(R.id.tv_total_sals);
         tv_amount_of_money_odd_detail = (TextView)findViewById(R.id.tv_amount_of_money_odd_detail);
         tv_amount_of_money_piecework_detail= (TextView)findViewById(R.id.tv_amount_of_money_piecework_detail);
-         tv_downloadSalsExcelByName_MonthAction = (TextView)findViewById(R.id.tv_downloadSalsExcelByName_MonthAction);
+         btn_downloadSalsExcelByName_MonthAction = (Button)findViewById(R.id.btn_downloadSalsExcelByName_MonthAction);
          tv_of_result= (TextView)findViewById(R.id.tv_of_result);
          tv_back_to_MainActivity = (TextView)findViewById(R.id.tv_back_to_MainActivity);
 
@@ -87,7 +88,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
         edOfDP.setOnTouchListener(new edOfDP_onTouchListenerImpl());
         tv_amount_of_money_piecework_detail.setOnClickListener(new tv_amount_of_money_piecework_detail_onClickListenerImpl());
         tv_amount_of_money_odd_detail.setOnClickListener(new tv_amount_of_money_odd_detail_onClickListenerImpl());
-        tv_downloadSalsExcelByName_MonthAction.setOnClickListener(new tv_downloadSalsExcelByName_MonthAction_onClickListenerImpl());
+         btn_downloadSalsExcelByName_MonthAction.setOnClickListener(new btn_downloadSalsExcelByName_MonthAction_onClickListenerImpl());
          tv_back_to_MainActivity.setOnClickListener(new tv_back_to_MainActivity_onClickListenerImpl());
 
 
@@ -202,10 +203,15 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Double oddJobSum=v_getOddSalsByName_monthList.get(v_getOddSalsByName_monthList.size()-1).getAmount_of_money_sum();
-                        tv_amount_of_money_odd_sum.setText(oddJobSum.toString());
-                        totalSals+=oddJobSum;
-                        tv_total_sals.setText(String.valueOf(totalSals));
+                        Double oddJobSum;
+                        if(null==v_getOddSalsByName_monthList||v_getOddSalsByName_monthList.size()==0){
+                            oddJobSum = 0.0;
+                        }else{
+                            oddJobSum=v_getOddSalsByName_monthList.get(v_getOddSalsByName_monthList.size()-1).getAmount_of_money_sum();
+                            tv_amount_of_money_odd_sum.setText(oddJobSum.toString());
+                            totalSals+=oddJobSum;
+                            tv_total_sals.setText(String.valueOf(totalSals));
+                        }
                     }
                 });
              }
@@ -223,13 +229,20 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
                 String responseData = response.body().string();
                 if(responseData=="") return;
                 v_getPieceworkSalsByName_monthList = Utility.getPieceworkSalsByName_monthList(responseData);
-                final Double pieceworkSum =v_getPieceworkSalsByName_monthList.get(v_getPieceworkSalsByName_monthList.size()-1).getAmount_of_money_sum();
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tv_amount_of_money_piecework_sum.setText(pieceworkSum.toString());
-                        totalSals+=pieceworkSum;
-                        tv_total_sals.setText(String.valueOf(totalSals));
+                        Double pieceworkSum;
+                        if(null==v_getPieceworkSalsByName_monthList||0==v_getPieceworkSalsByName_monthList.size()){
+                            pieceworkSum = 0.0;
+                        }else{
+                            pieceworkSum =  v_getPieceworkSalsByName_monthList.get(v_getPieceworkSalsByName_monthList.size()-1).getAmount_of_money_sum();
+
+                            tv_amount_of_money_piecework_sum.setText(pieceworkSum.toString());
+                            totalSals+=pieceworkSum;
+                            tv_total_sals.setText(String.valueOf(totalSals));
+                        }
                     }
                 });
             }
@@ -281,16 +294,14 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
      * 下载此人的工资excel
      */
 
-    private class tv_downloadSalsExcelByName_MonthAction_onClickListenerImpl implements View.OnClickListener {
+    private class btn_downloadSalsExcelByName_MonthAction_onClickListenerImpl implements View.OnClickListener {
         @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onClick(View v) {
 
             String fileName = v_emp_name+"_"+edOfDP.getText().toString()+".xls";
             File xlsFile = new File(getExternalCacheDir(),fileName);
-            String dir ="";
             try {
-                dir =xlsFile.getAbsolutePath().toString();
                 if(xlsFile.exists()){
                     xlsFile.delete();
                 }else {
@@ -299,7 +310,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            V_Overtime_Detail v_overtime_detail = new V_Overtime_Detail("加工工资",Double.parseDouble(tv_overtime_pay_sum.getText().toString()));
+            V_Overtime_Detail v_overtime_detail = new V_Overtime_Detail("加班工资",Double.parseDouble(tv_overtime_pay_sum.getText().toString()));
             List<V_Overtime_Detail> v_overtime_detailsList = new ArrayList<>();
             v_overtime_detailsList.add(v_overtime_detail);
             JxlExcelHelper jxlExcelHelper = new JxlExcelHelper(xlsFile);

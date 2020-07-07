@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.learning.gson.MSG;
 import com.learning.gson.V_Daily_Record;
 import com.learning.gson.V_Emp_Name;
 import com.learning.gson.V_Specific_Process;
@@ -32,7 +33,6 @@ import com.permissionx.guolindev.callback.RequestCallback;
 import com.xys.libzxing.zxing.activity.CaptureActivity;
 
 import java.io.IOException;
-import java.security.Permission;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,7 +65,8 @@ public class SubmitYieldsActivity extends BaseActivity {
     private Button btnSubmit = null;
     private Button btnToChoosePN = null;
     //工单标题
-    private TextView textViewOfProductsName = null;
+    private TextView tv_productOrder = null;
+    private TextView tv_styleName;
     List<V_Emp_Name> v_emp_name_of_pn_line_list = null;
     List<V_Emp_Name> v_emp_name_of_pn_list = null;
 
@@ -77,7 +78,8 @@ public class SubmitYieldsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_yields);
         //产品名称显示
-        textViewOfProductsName = (TextView)findViewById(R.id.textViewOfProductsName);
+        tv_productOrder = (TextView)findViewById(R.id.tv_productOrder);
+        tv_styleName = (TextView)findViewById(R.id.tv_styleName);
         this.editTextOfDatePicker = (EditText)findViewById(R.id.editTextOfDatePicker);
         this.editTextOfStationName = (EditText)super.findViewById(R.id.editTextOfStationName);
         this.editTextOfEmpName = (EditText)super.findViewById(R.id.editTextOfEmpName);
@@ -96,13 +98,15 @@ public class SubmitYieldsActivity extends BaseActivity {
 
 
         //设置工单
-        this.textViewOfProductsName.setText(getIntent().getStringExtra("products_name"));
+        this.tv_productOrder.setText(getIntent().getStringExtra("product_order"));
+        //设置款式
+        this.tv_styleName.setText(getIntent().getStringExtra("style_name"));
         //设置日期
         this.editTextOfDatePicker.setText(DateHelper.getTodayStr());
         /**
-         * 获取该产品下的所有员工，当线体下没有员工日产量记录时，以作备用。
+         * ***********暂时不用获取该产品下的所有员工，当线体下没有员工日产量记录时，以作备用。
          */
-        getAllEmpInfosWithPN(textViewOfProductsName.getText().toString());
+        //getAllEmpInfosWithPN(****************.getText().toString());
         lostFocus();
     }
     @Override
@@ -120,44 +124,29 @@ public class SubmitYieldsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
-            //获取线体的扫描结果
+            //获取线体的扫描结果,依据线体，款式获取对应的工序。
             case REQUEST_TO_GET_STATION_NAME:
                 if(resultCode==RESULT_OK){
                     String returnedStationName= data.getStringExtra("result");
                     this.editTextOfStationName.setText(returnedStationName);
                     //焦点移动
-                    this.editTextOfEmpName.requestFocus();
+                    //判断工位标识中是否存在"_"
+                    if(returnedStationName.indexOf("_")<=0){
+                        Toast.makeText(SubmitYieldsActivity.this,"工位格式不对，应为：测试组_1号",Toast.LENGTH_LONG).show();
+                        SubmitYieldsActivity.this.editTextOfStationName.setText("");
+                        SubmitYieldsActivity.this.editTextOfSpecificProcess.setText("");
+                        return;
+                    }
+
                     //这里对线体拆分
                     currLineName = returnedStationName.split("_")[0];
-                    //依据产品，工位编号获取对应的工序
+                    //依据工单，工位编号获取对应的工序
                     //异步获取
                     Map<String,String> map = new HashMap<String,String>();
-                    map.put("products_name",textViewOfProductsName.getText().toString());
+                    map.put("style_name",tv_styleName.getText().toString());
                     map.put("line_name",currLineName);
-                    map.put("station_name",editTextOfStationName.getText().toString().split("_")[1]);
-                    HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetProcessByPN_Line_StationAction), map, new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                            LogUtil.d("SubmitYieldsActivity",e.toString());
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            final String responseData = response.body().string();
-                            final List<V_Specific_Process> v_specific_processList = Utility.getProcessByPN_Line_StationAction(responseData);
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    StringBuffer sb = new StringBuffer();
-                                    for(V_Specific_Process v_specific_process:v_specific_processList){
-                                        sb.append(v_specific_process.toString()+"\r\n");
-                                    }
-                                    sb = sb.deleteCharAt(sb.length()-2);
-                                    SubmitYieldsActivity.this.editTextOfSpecificProcess.setText(sb.toString());
-                                }
-                            });
-                        }
-                    });
+                    map.put("station_name",returnedStationName.split("_")[1]);
+                    judgeLineAndStationName(map);
                 }
             break;
                 //扫描二维码获取员工姓名
@@ -206,8 +195,8 @@ public class SubmitYieldsActivity extends BaseActivity {
                 break;
             case  REQUEST_TO_CHOOSE_PN:
                 if(resultCode==RESULT_OK){
-                    String returnedPN = data.getStringExtra("products_name");
-                    this.textViewOfProductsName.setText(returnedPN);
+                    String returnedPNOrderName = data.getStringExtra("product_order");
+                    this.tv_productOrder.setText(returnedPNOrderName);
                 }
                 break;
             case REQUEST_GET_ALL_EMPS:
@@ -226,6 +215,39 @@ public class SubmitYieldsActivity extends BaseActivity {
             default:
                 break;
         }
+    }
+
+    private void getProcessByPN_Line_Station(Map<String, String> map) {
+        HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetProcessByPN_Line_StationAction), map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.d("SubmitYieldsActivity",e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String responseData = response.body().string();
+                final List<V_Specific_Process> v_specific_processList = Utility.getProcessByPN_Line_StationAction(responseData);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(0==v_specific_processList.size()){
+                            Toast.makeText(SubmitYieldsActivity.this,"款式："+tv_styleName.getText()+" 在"+editTextOfStationName.getText()+" 上没有布置工序！",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        StringBuffer sb = new StringBuffer();
+                        for(V_Specific_Process v_specific_process:v_specific_processList){
+                            sb.append(v_specific_process.toString()+"\r\n");
+                        }
+                        String temp = sb.toString();
+                        temp = temp.substring(0,temp.lastIndexOf("\r\n"));
+                        SubmitYieldsActivity.this.editTextOfSpecificProcess.setText(temp);
+                        //贯标定位至
+                        SubmitYieldsActivity.this.editTextOfEmpName.requestFocus();
+                    }
+                });
+            }
+        });
     }
 
     private class editTextOfDatePicker_onTouchListenerImpl implements View.OnTouchListener {
@@ -274,7 +296,6 @@ public class SubmitYieldsActivity extends BaseActivity {
         this.editTextOfDatePicker.setShowSoftInputOnFocus(false);
         this.editTextOfSpecificProcess.setShowSoftInputOnFocus(false);
     }
-
     /**
      * 工作站二维码扫描事件
      */
@@ -296,7 +317,6 @@ public class SubmitYieldsActivity extends BaseActivity {
 
         }
     }
-
     /**
      * 转向员工姓名选择页面
      */
@@ -324,14 +344,12 @@ public class SubmitYieldsActivity extends BaseActivity {
             startActivityForResult(intent,REQUEST_TO_GET_EMP_NAME_BY_QRCode);
         }
     }
-
     /**
      * 获取该工单，该线体下 最近一天日报表中的员工名单
      * @param products_name
      * @param line_name
      */
     private void getAllEmpInfosWithPN_LineName(final String products_name, final String line_name) {
-
         Map<String,String> map = new HashMap<String,String>();
         map.put("products_name",products_name);
         map.put("line_name",line_name);
@@ -339,7 +357,6 @@ public class SubmitYieldsActivity extends BaseActivity {
             @Override
             public void onFailure(Call call, IOException e) {
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
@@ -347,13 +364,11 @@ public class SubmitYieldsActivity extends BaseActivity {
             }
         });
     }
-
     /**
      * 获取该工单下  所有最近一天的日报表员工 记录提交记录。
      * @param products_name
      */
     private void getAllEmpInfosWithPN(final String products_name) {
-
         Map<String,String> map = new HashMap<String,String>();
         map.put("products_name",products_name);
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetAllEmpInfosWithPN), map, new Callback() {
@@ -361,7 +376,6 @@ public class SubmitYieldsActivity extends BaseActivity {
             public void onFailure(Call call, IOException e) {
                 LogUtil.d("SubmitYieldsActivity: ",e.toString());
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
@@ -369,7 +383,6 @@ public class SubmitYieldsActivity extends BaseActivity {
             }
         });
     }
-
     /**
      * 回到选择工单Activity
      */
@@ -380,19 +393,19 @@ public class SubmitYieldsActivity extends BaseActivity {
             startActivityForResult(intent,REQUEST_TO_CHOOSE_PN);
         }
     }
-
     /**
-     * 选择工序监听器
+     * 选择工序监听器,此处不选择。
      */
     private class EditTextOfSpecificProcess_OnClickViewListenerImpl implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            /*
             Intent intent=new Intent(SubmitYieldsActivity.this,ChooseSpecificProcessActivity.class);
             intent.putExtra("products_name",textViewOfProductsName.getText().toString());
             startActivityForResult(intent,REQUEST_TO_GET_THE_SPECIFIC_PROCESS);
+                         */
         }
     }
-
     /**
      * 提交产量按钮。
      */
@@ -400,7 +413,7 @@ public class SubmitYieldsActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             final Map<String,String> yields_to_submit_map = new HashMap<String,String>();
-            if("".equals(textViewOfProductsName.getText().toString())){
+            if("".equals(tv_productOrder.getText().toString())){
                 Toast.makeText(SubmitYieldsActivity.this,"请先选择工单！",Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -420,7 +433,8 @@ public class SubmitYieldsActivity extends BaseActivity {
                 return;
             }
             //参数全部与数据库保持一致。从数据开始进行。
-            yields_to_submit_map.put("v_products_name",textViewOfProductsName.getText().toString());
+            yields_to_submit_map.put("v_product_order",tv_productOrder.getText().toString());
+            yields_to_submit_map.put("v_style_name",tv_styleName.getText().toString());
             yields_to_submit_map.put("v_line_name",currLineName);
             yields_to_submit_map.put("v_station_name",editTextOfStationName.getText().toString().split("_")[1]);
             yields_to_submit_map.put("v_emp_name",emp_name);
@@ -433,7 +447,6 @@ public class SubmitYieldsActivity extends BaseActivity {
                 public void onFailure(Call call, IOException e) {
                     LogUtil.d(TAG,e.toString());
                 }
-
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseData= response.body().string();
@@ -461,13 +474,13 @@ public class SubmitYieldsActivity extends BaseActivity {
                             dialog.setPositiveButton("继续提交", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    submitTheDailyRecord(yields_to_submit_map);
+                                submitTheDailyRecord(yields_to_submit_map);
                                 }
                             });
                             dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    return;
+                                return;
                                 }
                             });
                             //dialog.setView(R.layout.alert_dialog_background);
@@ -493,11 +506,37 @@ public class SubmitYieldsActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Snackbar.make(SubmitYieldsActivity.this.textViewOfProductsName,"已提交: "+Integer.parseInt(responseData)+"行。",Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(SubmitYieldsActivity.this.tv_productOrder,"已提交: "+Integer.parseInt(responseData)+"行。",Snackbar.LENGTH_SHORT).show();
                     }
                 });
             }
         });
     }
+    //先判断线体，工位是否存在
+    void judgeLineAndStationName(final Map<String,String> map){
 
+        HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfJudgeLineAndStationName), map, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                LogUtil.d("SubmitYieldsActivity",e.toString());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String responseData = response.body().string();
+                final MSG msg  = Utility.getMSG(responseData);
+                if(!msg.isFlag()){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SubmitYieldsActivity.this, msg.getMsg(), Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    });
+                }
+                //获取线体，工站，款式对应的工序信息
+                getProcessByPN_Line_Station(map);
+            }
+        });
+    }
 }

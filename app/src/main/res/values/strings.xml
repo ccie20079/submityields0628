@@ -2,8 +2,10 @@
     <string name="app_name">产量提交</string>
     <string name="str_submitted_info">西服 戗驳领 99  20-05-27 16:26\n\n裤子 裤脚 199   20-05-27 16:26</string>
     <string name="title_of_toolbar_submitYields">依线体报工</string>
-    <string name="urlOfGetAllProductInfosRecent">http://192.168.1.113/Show_Products_Cost/GetAllProductInfosRecentAction!getAllProductInfosRecentOrderByCreatedTimeDesc.action</string>
-    <string name="urlOfGetAllLineInfos">http://192.168.1.113/Show_Products_Cost/GetAllLineInfosAction!getAllLinesOrderByCreatedTimeDesc.action</string>
+    <string name="urlOfGetAllProductInfosRecent">http://192.168.1.113/Show_Products_Cost/GetAllProductInfosRecentAction!getAllProductsOrderInfo.action</string>
+    <string name="urlOfGetAllStylesDistributionAction">http://192.168.1.113/Show_Products_Cost/GetAllStylesDistributionAction!getAllStylesDistribution.action</string>
+    <string name="urlOfGetProcessesByLineAndStyleNameAction">http://192.168.1.113/Show_Products_Cost/GetProcessesByLineAndStyleNameAction!getProcessByLineAndStyleName.action</string>
+    <string name="urlOfGetAllLineInfos">http://192.168.1.113/Show_Products_Cost/GetAllLineInfosAction!getAllLineNameAndMonitor.action</string>
     <string name="urlOfGetAllTeamInfos">http://192.168.1.113/Show_Products_Cost/GetAllTeamInfosAction!getAllTeamsOrderByCreatedTimeDesc.action</string>
     <string name="urlOfGetAllEmpInfosWithPN_LineName">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosWithPN_LineName.action</string>
     <string name="urlOfGetAllEmpInfosWithPN">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosWithPN.action</string>
@@ -12,6 +14,7 @@
     <string name="urlOfGetTheSpecificProcesses">http://192.168.1.113/Show_Products_Cost/GetTheSpecificProcessesOfThePNAction!getTheSpecificProcesses.action</string>
     <string name="urlOfYieldsDialyRecordSubmit">http://192.168.1.113/Show_Products_Cost/Yields_Daily_Record_Submit_Action!yields_Daily_Record_Submit.action</string>
     <string name="urlOfGetProcessByPN_Line_StationAction">http://192.168.1.113/Show_Products_Cost/GetProcessByPN_Line_Station_Action!getProcessByPN_Line_Station.action</string>
+    <string name="urlOfJudgeLineAndStationName">http://192.168.1.113/Show_Products_Cost/GetProcessByPN_Line_Station_Action!judgeLineAndStationName.action</string>
     <string name="urlOfIfExistsTheEmpNameAction">http://192.168.1.113/Show_Products_Cost/IfExistsTheEmpNameAction!ifExistsTheEmpName.action</string>
     <string name="urlOfSaveDailyRecordAction">http://192.168.1.113/Show_Products_Cost/SaveDailyRecordAction!saveDailyRecord.action</string>
     <string name="urlOfGetDRecordByPN_EmpName_DayAction">http://192.168.1.113/Show_Products_Cost/GetDRecordByPN_EmpName_DayAction!getDRecordByPN_EmpName_Day.action</string>

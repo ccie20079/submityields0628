@@ -57,6 +57,10 @@ public class MainActivity extends BaseActivity {
                         intent  = new Intent(MainActivity.this,OddJobActivity.class);
                         startActivity(intent);
                         break;
+                    case R.id.show_line_station_process:
+                        intent = new Intent(MainActivity.this, V_Style_Line_Activity.class);
+                        startActivity(intent);
+                        break;
                     default:
                         break;
                 }

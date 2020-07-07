@@ -1,4 +1,4 @@
-package com.learning.submityields0628;
+package com.learning.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 
 import com.learning.gson.V_Daily_Record;
 import com.learning.gson.V_Specific_Process;
+import com.learning.submityields0628.R;
 
 import java.util.List;
 

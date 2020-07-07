@@ -96,18 +96,17 @@
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="工时:"
                 android:textSize="17sp"
-                android:gravity="bottom|center"
-                android:paddingBottom="10dp"
+                android:gravity="bottom"
                 android:textAlignment="center"
                 />
             <EditText
                 android:id="@+id/edOfManhours"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="2.7"
                 android:textSize="15sp"
                 android:gravity="center|bottom"
@@ -174,8 +173,8 @@
                 android:textSize="17sp"
                 android:textAlignment="center"
                 />
-            <EditText
-                android:id="@+id/edOfPlace"
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/appCompatSpinnerOfLineName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.7"

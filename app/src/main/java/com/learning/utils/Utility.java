@@ -4,15 +4,19 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.learning.gson.MSG;
 import com.learning.gson.V_Daily_Record;
 import com.learning.gson.V_Emp_Info;
 import com.learning.gson.V_Emp_Name;
 import com.learning.gson.V_GET_Similar_Odd_Job;
+import com.learning.gson.V_GetAllStylesDistribution;
 import com.learning.gson.V_GetOddSalsByName_Month;
 import com.learning.gson.V_GetPieceworkSalsByName_Month;
 import com.learning.gson.V_Line_Info;
 import com.learning.gson.V_Products_Info_Recent;
+import com.learning.gson.V_Products_Order;
 import com.learning.gson.V_Specific_Process;
+import com.learning.gson.V_Style_Station_Process;
 import com.learning.gson.V_Team_Info;
 import com.learning.gson.V_Yields_Daily_Report;
 
@@ -137,6 +141,21 @@ public class Utility<T> {
         List<V_Products_Info_Recent> v_products_info_recentList = gson.fromJson(jsonData,new TypeToken<List<V_Products_Info_Recent>>(){}.getType());
         return v_products_info_recentList;
     }
+    public static List<V_Products_Order> getAllProductsOrderInfo(String jsonData) {
+        Gson gson = new Gson();
+        List<V_Products_Order> v_products_orderList = gson.fromJson(jsonData,new TypeToken<List<V_Products_Order>>(){}.getType());
+        return v_products_orderList;
+    }
+    public static List<V_GetAllStylesDistribution> getAllStylesDistribution(String jsonData) {
+        Gson gson = new Gson();
+        List<V_GetAllStylesDistribution> v_getAllStylesDistributionList = gson.fromJson(jsonData,new TypeToken<List<V_GetAllStylesDistribution>>(){}.getType());
+        return v_getAllStylesDistributionList;
+    }
+    public static List<V_Style_Station_Process> getProcessByLineAndStyleName(String jsonData) {
+        Gson gson = new Gson();
+        List<V_Style_Station_Process> v_style_station_processList = gson.fromJson(jsonData,new TypeToken<List<V_Style_Station_Process>>(){}.getType());
+        return v_style_station_processList;
+    }
     public static List<V_Specific_Process> getTheSpecificProcessesByPN(String jsonData){
         Gson gson = new Gson();
         List<V_Specific_Process> v_specific_processList = gson.fromJson(jsonData,new TypeToken<List<V_Specific_Process>>(){}.getType());
@@ -171,6 +190,12 @@ public class Utility<T> {
         Gson gson = new Gson();
         ArrayList<V_GET_Similar_Odd_Job> v_get_similar_odd_jobArrayList = gson.fromJson(string,new TypeToken<List<V_GET_Similar_Odd_Job>>(){}.getType());
         return v_get_similar_odd_jobArrayList;
+    }
+
+    public static MSG getMSG(String responseData) {
+        Gson gson = new Gson();
+        MSG msg = gson.fromJson(responseData,new TypeToken<MSG>(){}.getType());
+        return msg;
     }
 
     public ArrayList<T> getListOfT(String jsonData){

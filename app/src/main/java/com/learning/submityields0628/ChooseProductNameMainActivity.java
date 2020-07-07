@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.learning.gson.V_Products_Info_Recent;
+import com.learning.Adapter.ProductInfosRecentAdapter;
+import com.learning.gson.V_Products_Order;
 import com.learning.utils.BaseActivity;
 import com.learning.utils.HttpUtil;
 import com.learning.utils.LogUtil;
@@ -24,7 +25,8 @@ import okhttp3.Response;
 
 public class ChooseProductNameMainActivity extends BaseActivity {
     private RecyclerView recyclerViewOfProducts = null;
-    private List<V_Products_Info_Recent> v_products_info_recentList= null;
+    //private List<V_Products_Info_Recent> v_products_info_recentList= null;
+    List<V_Products_Order> v_products_orderList = null;
     TextView tv_back_to_MainActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,14 @@ public class ChooseProductNameMainActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseData = response.body().string();
-                v_products_info_recentList = Utility.getAllProductInfosRecentOrderByCreatedTimeDesc(responseData);
-                LogUtil.d("ChooseProductNameMainActivity",v_products_info_recentList.toString());
+                v_products_orderList = Utility.getAllProductsOrderInfo(responseData);
+
+                LogUtil.d("ChooseProductNameMainActivity",v_products_orderList.toString());
                 //更新UI
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ProductInfosRecentAdapter adapter = new ProductInfosRecentAdapter(v_products_info_recentList);
+                        ProductInfosRecentAdapter adapter = new ProductInfosRecentAdapter(v_products_orderList);
                         recyclerViewOfProducts.setAdapter(adapter);
                     }
                 });

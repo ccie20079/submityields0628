@@ -20,11 +20,11 @@ public class V_GetOddSalsByName_Month implements Serializable {
 	@BeanFileAnnotation(order = 5,aliasName = "数量")
      private String quantities;
 	@BeanFileAnnotation(order = 6,aliasName = "金额")
-    private String amount_of_money;
+	private double amount_of_money_sum;
 	@BeanFileAnnotation(order = 7,aliasName = "保存时间")
     private String inserted_time;
-	//@BeanFileAnnotation(order = 8,aliasName = "合计")
-	private double amount_of_money_sum;
+	//@BeanFileAnnotation(order = 6,aliasName = "金额")	未注解，不写入Excel
+	private String amount_of_money;
 
 
 	public double getAmount_of_money_sum() {

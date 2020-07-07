@@ -13,9 +13,11 @@ public class V_GetPieceworkSalsByName_Month implements Serializable {
 	private String seq;
 	@BeanFileAnnotation(order=2,aliasName = "线体")
     private String line_name;
-	@BeanFileAnnotation(order=3,aliasName = "品名")
+	//@BeanFileAnnotation(order=3,aliasName = "品名")
     private String products_name;
-	@BeanFileAnnotation(order=4,aliasName = "部位")
+    @BeanFileAnnotation(order=3,aliasName = "工单")
+	private String product_order;
+    @BeanFileAnnotation(order=4,aliasName = "部位")
     private String summary_process;
 	@BeanFileAnnotation(order=5,aliasName = "工序")
     private String specific_process;
@@ -83,6 +85,14 @@ public class V_GetPieceworkSalsByName_Month implements Serializable {
 	}
 	public void setInserted_time(String inserted_time) {
 		this.inserted_time = inserted_time;
+	}
+
+	public String getProduct_order() {
+		return product_order;
+	}
+
+	public void setProduct_order(String product_order) {
+		this.product_order = product_order;
 	}
 }
 

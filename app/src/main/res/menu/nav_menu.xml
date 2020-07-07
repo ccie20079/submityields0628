@@ -13,5 +13,9 @@
             android:id="@+id/get_sals_to_excel"
             android:title="工资查询及导出"
             />
+        <item
+            android:id="@+id/show_line_station_process"
+            android:title="款式_线体_工站_工序 分布"
+            />
     </group>
 </menu>

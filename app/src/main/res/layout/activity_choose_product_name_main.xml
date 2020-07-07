@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:orientation="horizontal"
-        android:gravity="right">
+        android:gravity="right|bottom">
         <TextView
             android:id="@+id/tv_back_to_MainActivity"
             android:layout_width="0dp"
@@ -26,9 +26,9 @@
             android:layout_width="0dp"
             android:layout_weight="90"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center|bottom"
             android:textAlignment="center"
-            android:text="工 单"
+            android:text="选择工单"
             android:textColor="#fff"
             android:textSize="20sp" />
     </LinearLayout>
@@ -37,5 +37,6 @@
         android:id="@+id/recyclerViewOfProducts"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
         />
 </LinearLayout>
