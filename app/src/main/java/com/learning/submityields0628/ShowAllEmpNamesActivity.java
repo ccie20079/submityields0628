@@ -14,7 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.learning.gson.V_Emp_Info;
+import com.learning.gson.Emp_Info;
 import com.learning.utils.BaseActivity;
 import com.learning.utils.HttpUtil;
 import com.learning.utils.LogUtil;
@@ -30,7 +30,7 @@ import okhttp3.Response;
 
 public class ShowAllEmpNamesActivity extends BaseActivity {
     private ListView listViewOfEmpInfo = null;
-    private List<V_Emp_Info> v_all_emp_info_list = null;
+    private List<Emp_Info> v_all_emp_info_list = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +42,9 @@ public class ShowAllEmpNamesActivity extends BaseActivity {
         this.listViewOfEmpInfo.setOnItemClickListener(new listViewOfEmpNameInfos_OnClickListenerImpl());
     }
 
-    private class EmpInfoAdapter extends ArrayAdapter<V_Emp_Info> {
+    private class EmpInfoAdapter extends ArrayAdapter<Emp_Info> {
         private int resourceId; //listView子项布局的ID
-        public EmpInfoAdapter(@NonNull Context context, int xmlItemResourceId, @NonNull List<V_Emp_Info> objects) {
+        public EmpInfoAdapter(@NonNull Context context, int xmlItemResourceId, @NonNull List<Emp_Info> objects) {
             super(context,xmlItemResourceId,objects);
             resourceId = xmlItemResourceId;
         }
@@ -53,7 +53,7 @@ public class ShowAllEmpNamesActivity extends BaseActivity {
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             //获取当前项的V_Line_Info实例
-            V_Emp_Info v_emp_info = getItem(position);
+            Emp_Info v_emp_info = getItem(position);
             View view;
             ViewHolder viewHolder;
             if(convertView==null){
@@ -82,7 +82,7 @@ public class ShowAllEmpNamesActivity extends BaseActivity {
     private class listViewOfEmpNameInfos_OnClickListenerImpl implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            V_Emp_Info v_emp_info = v_all_emp_info_list == null ? null : v_all_emp_info_list.get(position);
+            Emp_Info v_emp_info = v_all_emp_info_list == null ? null : v_all_emp_info_list.get(position);
             Intent intent = new Intent();
             intent.putExtra("emp_name", v_emp_info == null ? "" : v_emp_info.getEmp_name());
             setResult(RESULT_OK, intent);
@@ -101,7 +101,7 @@ public class ShowAllEmpNamesActivity extends BaseActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-                v_all_emp_info_list = Utility.getAllEmpInfosOrderByPinYinAsc(responseText);
+                v_all_emp_info_list = Utility.getEmpInfos(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

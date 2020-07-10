@@ -21,9 +21,8 @@
         android:roundIcon="@mipmap/dukepu"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.learning.submityields0628.V_Style_Station_Process_Activity">
-
-        </activity>
+        <activity android:name=".AddEmpActivity"></activity>
+        <activity android:name=".V_Style_Station_Process_Activity"></activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -42,9 +41,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.learning.submityields0628.V_Style_Line_Activity">
+        <activity android:name=".V_Style_Line_Activity">
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".GetSalsByName_MonthActivity">

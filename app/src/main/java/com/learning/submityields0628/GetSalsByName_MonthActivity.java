@@ -132,7 +132,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
             @Override
             public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
                 if(allGranted){
-                    String Imei = tm.getImei(0);
+                    final String Imei = tm.getImei(0);
                     Map<String,String> map =new HashMap<String, String>();
                     map.put("v_imei",Imei);
                     //查询对应的员工姓名
@@ -145,11 +145,18 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             String result = response.body().string();
                             if(result ==null||result==""){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MyApplication.getContext(),"此IMEI尚未注册，请在导入至emp_info中！",Toast.LENGTH_LONG).show();
+                                       }
+                                });
                                 return;
                             }
                             v_emp_name = result;
                             String v_year_month_str = edOfDP.getText().toString();
                             map_GetSalsByName_MonthAction.put(Enum_GetSalsByName_Month.v_emp_name.toString(),v_emp_name);
+                            map_GetSalsByName_MonthAction.put(Enum_GetSalsByName_Month.v_imei.toString(),Imei);
                             map_GetSalsByName_MonthAction.put(Enum_GetSalsByName_Month.v_year_month_str.toString(),v_year_month_str);
                             //获取相应的计件工资总信息。
                             getPieceworkSalsByName_MonthAction(map_GetSalsByName_MonthAction);
@@ -166,7 +173,7 @@ public class GetSalsByName_MonthActivity extends BaseActivity {
     }
 
     private void getOvertimePayByName_Month(Map<String, String> map_getSalsByName_monthAction) {
-        HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetOvertimePayByName_Month), map_getSalsByName_monthAction, new Callback() {
+        HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetAllOverTimeByIMEI_MonthStr), map_getSalsByName_monthAction, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());

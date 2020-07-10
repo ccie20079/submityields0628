@@ -17,5 +17,9 @@
             android:id="@+id/show_line_station_process"
             android:title="款式_线体_工站_工序 分布"
             />
+        <item
+            android:id="@+id/add_Emp_info"
+            android:title="新增员工"
+            />
     </group>
 </menu>

@@ -28,4 +28,9 @@ public class V_Team_Info {
     }
 
     private String monitor;
+
+    @Override
+    public String toString() {
+        return team_name + " 班长：" + monitor;
+    }
 }

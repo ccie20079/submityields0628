@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.learning.utils.BaseActivity;
 
+import org.apache.log4j.chainsaw.Main;
 
 
 /**
@@ -59,6 +60,10 @@ public class MainActivity extends BaseActivity {
                         break;
                     case R.id.show_line_station_process:
                         intent = new Intent(MainActivity.this, V_Style_Line_Activity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.add_Emp_info:
+                        intent = new Intent(MainActivity.this,AddEmpActivity.class);
                         startActivity(intent);
                         break;
                     default:

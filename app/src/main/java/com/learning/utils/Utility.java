@@ -4,9 +4,9 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.learning.gson.Emp_Info;
 import com.learning.gson.MSG;
 import com.learning.gson.V_Daily_Record;
-import com.learning.gson.V_Emp_Info;
 import com.learning.gson.V_Emp_Name;
 import com.learning.gson.V_GET_Similar_Odd_Job;
 import com.learning.gson.V_GetAllStylesDistribution;
@@ -131,10 +131,15 @@ public class Utility<T> {
        List<V_Emp_Name> v_emp_nameList = gson.fromJson(jsonData,new TypeToken<List<V_Emp_Name>>(){}.getType());
        return v_emp_nameList;
     }
-    public static List<V_Emp_Info> getAllEmpInfosOrderByPinYinAsc(String jsonData) {
+    public static List<Emp_Info> getEmpInfos(String jsonData) {
         Gson gson = new Gson();
-        List<V_Emp_Info> v_emp_infoList = gson.fromJson(jsonData,new TypeToken<List<V_Emp_Info>>(){}.getType());
+        List<Emp_Info> v_emp_infoList = gson.fromJson(jsonData,new TypeToken<List<Emp_Info>>(){}.getType());
         return v_emp_infoList;
+    }
+    public static Emp_Info getEmpInfo(String jsonData) {
+        Gson gson = new Gson();
+        Emp_Info v_emp_info = gson.fromJson(jsonData,new TypeToken<Emp_Info>(){}.getType());
+        return v_emp_info;
     }
     public static List<V_Products_Info_Recent> getAllProductInfosRecentOrderByCreatedTimeDesc(String jsonData) {
         Gson gson = new Gson();

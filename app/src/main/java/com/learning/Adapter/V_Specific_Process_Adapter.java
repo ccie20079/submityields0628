@@ -45,7 +45,7 @@ public class V_Specific_Process_Adapter extends RecyclerView.Adapter<V_Specific_
         holder.tv_seq_p_c_record.setText(v_specific_process.getSeq_p_c_record()+".");
         holder.tv_summary_process.setText(v_specific_process.getSummary_process());
         holder.tv_specific_process.setText(v_specific_process.getSpecific_process());
-        holder.tv_man_hours.setText(String.valueOf(v_specific_process.getMan_hours()+" s "));
+        holder.tv_man_hours.setText(String.valueOf(v_specific_process.getMan_hours()+" S "));
         holder.tv_labour_cost.setText(String.valueOf(v_specific_process.getLabour_cost()));
     }
 
