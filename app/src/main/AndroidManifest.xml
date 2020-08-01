@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.learning.submityields0628">
 
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 在访问/sdcard/Android/Data路径时使用，包路径下暂时不用。 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -21,9 +19,19 @@
         android:roundIcon="@mipmap/dukepu"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AddEmpActivity"></activity>
-        <activity android:name=".V_Style_Station_Process_Activity"></activity>
+        <activity
+            android:name=".GetSalsByName_MonthActivity"
+            android:label="@string/title_activity_get_sals_by_name__month"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".V_Style_Station_Detail">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AddEmpActivity" />
+        <activity android:name=".V_Style_Station_Process_Activity" /> <!-- 用户获取Uri 7.0以上系统  用于打开指定位置的Excel -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.learning.submityields0628.fileprovider"
@@ -34,19 +42,27 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".GetPieceWorkSalsByName_MonthActivity" />
+        <activity android:name=".GetOddSalsByName_MonthActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".V_Style_Line_Activity">
+        <activity
+            android:name=".V_Style_Line_Activity"
+            android:launchMode="singleTask">
+
+            <!-- launchMode 、。 -->
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GetSalsByName_MonthActivity">
+        <activity android:name=".GetSalsByName_MonthActivity_backup">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

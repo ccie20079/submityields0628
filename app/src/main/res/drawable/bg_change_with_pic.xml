@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding = "utf-8"?>
+<ripple
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:color="@color/gray">    <!--波纹颜色-->
+    <item>
+        <selector>
+            <!--未点击背景图-->
+            <item android:drawable="@drawable/normal_bg"
+                android:state_pressed="false"></item>
+            <item android:drawable="@drawable/selected_bg"
+                android:state_pressed="true"></item>
+        </selector>
+    </item>
+</ripple>
+<!--    美 /ˈrɪpl/  波纹-->

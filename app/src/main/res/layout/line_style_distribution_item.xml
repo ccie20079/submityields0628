@@ -1,85 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="112dp"
-    android:orientation="horizontal"
-    android:background="@color/skyblue"
-    >
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardCornerRadius="4dp">
     <!--在RecyclerView中，item的布局height要设置为wrap_content-->
-    <ImageView
-        android:id="@+id/imgViewOfTheProducts"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="20dp"
-        android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:layout_marginTop="5dp"
-        />
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="2.7"
-        android:orientation="vertical"
-        android:gravity="right"
-        android:layout_marginRight="20dp"
-        >
-
-        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/skyblue">
+        <ImageView
+            android:id="@+id/imgViewOfTheProducts"
+            android:layout_width="143dp"
+            android:layout_height="183dp"
+            android:scaleType="centerCrop"/>
+<!--        android:scaleType="centerCrop"  表示依据比例显示于ImageView中-->
+        <TextView
+            android:id="@+id/tv_v_getAllStylesDistribution"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="right"
-            android:layout_marginRight="15dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-
-                android:gravity="right|bottom"
-                android:text="款式："
-                android:textAlignment="gravity"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_style_Name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="right|bottom"
-                android:textAlignment="gravity"
-                android:text="款式"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:gravity="right"
-            android:layout_marginRight="15dp">
-            <TextView
-                android:id="@+id/tv_line_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="right|bottom"
-                android:textAlignment="gravity"
-                android:text="线体名"
-                android:textSize="14sp"
-                android:layout_marginLeft="5dp"/>
-            <TextView
-                android:id="@+id/tv_station_num"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="right|bottom"
-                android:textAlignment="gravity"
-                android:text="站位数目"
-                android:textSize="14sp"
-                android:layout_marginLeft="5dp"/>
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:gravity="right|bottom"
+            android:textSize="13sp"
+            android:lineSpacingMultiplier="1.4"
+            android:background="@color/skyblue"/>
     </LinearLayout>
-
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

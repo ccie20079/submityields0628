@@ -1,5 +1,9 @@
 package com.learning.gson;
 
+
+import com.learning.Adapter.HeaderRVAdapter;
+import com.learning.Adapter.SingleRecordOfGroupRVAdapter;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,23 +15,19 @@ import java.util.List;
 *	email: ccie20079@126.com
 *	
 */
-public class V_Style_Station_Process {
+public class V_Style_Station_Process implements HeaderRVAdapter.IGroupInfo {
 	private String line_name;
 	private String style_name;
 	private String station_name;
 	private Date max_inserted_time;
 	private String seq_of_p_c_conn_str;
-	private List<V_Specific_Process> v_specific_process_list;
-
+	private List<V_Specific_Process> v_specific_process_list = new ArrayList<>();
 	public List<V_Specific_Process> getV_specific_process_list() {
-		if(v_specific_process_list!=null)
 		return v_specific_process_list;
-		return new ArrayList<V_Specific_Process>();
 	}
 	public void setV_specific_process_list(List<V_Specific_Process> v_specific_process_list) {
 		this.v_specific_process_list = v_specific_process_list;
 	}
-	
 	public V_Style_Station_Process() {
 		super();
 	}
@@ -61,7 +61,18 @@ public class V_Style_Station_Process {
 	public void setSeq_of_p_c_conn_str(String seq_of_p_c_conn_str) {
 		this.seq_of_p_c_conn_str = seq_of_p_c_conn_str;
 	}
-	
-	
-}	
+	@Override
+	public String toString() {
+		return "工位： "+station_name;
+	}
+	@Override
+	public String getHeader() {
+		return "工位： "+station_name;
+	}
+
+	@Override
+	public List<? extends SingleRecordOfGroupRVAdapter.ISingleRecordOfGroup> getDetailInfoList() {
+		return (List<? extends SingleRecordOfGroupRVAdapter.ISingleRecordOfGroup>) this.v_specific_process_list;
+	}
+}
 

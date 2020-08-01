@@ -27,7 +27,17 @@ public class Emp_Info implements CharSequence{
 
 	private String monitor;
 
-	private String imei;
+	private String mac;
+
+	private String role;
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public int getSeq() {
 		return seq;
@@ -65,17 +75,20 @@ public class Emp_Info implements CharSequence{
 	public void setMonitor(String monitor) {
 		this.monitor = monitor;
 	}
-	public String getImei() {
-		return imei;
+
+	public String getMac() {
+		return mac;
 	}
-	public void setImei(String imei) {
-		this.imei = imei;
+
+	public void setMac(String mac) {
+		this.mac = mac;
 	}
-	public Emp_Info(String team_name,String emp_name,  String imei) {
+
+	public Emp_Info(String team_name, String emp_name, String mac) {
 		super();
 		this.emp_name = emp_name;
 		this.team_name = team_name;
-		this.imei = imei;
+		this.mac = mac;
 	}
 
 	@Override
@@ -96,11 +109,11 @@ public class Emp_Info implements CharSequence{
 
 	@Override
 	public String toString() {
-		return "  " + team_name + "\r\n"
-				+"班长：" + monitor + "\r\n"
-				+ "" + emp_name + "\r\n"
-				+ "" + imei + "\r\n"
-				+ "" + TimeHelper.getTimeStr(inserted_time,"yyyy-MM-dd HH:mm:ss");
+		return "已注册：\r\n"
+				+ team_name + "   班长：" + monitor + "\r\n"
+				+ emp_name + "\r\n"
+				+"MAC: "+ mac + "\r\n"
+				+ TimeHelper.getTimeStr(inserted_time,"yyyy-MM-dd HH:mm:ss");
 	}
 
 }

@@ -13,10 +13,10 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import com.learning.gson.BeanFileAnnotation;
+import com.learning.gson.V_Overtime_Detail;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -114,6 +114,7 @@ public class JxlExcelHelper {
         WritableWorkbook workbook = null;
         try {
             workbook = Workbook.createWorkbook(xlsFile);
+
             //设置表格的名字
             WritableSheet sheet = workbook.createSheet("账单", 0);
             //创建标题栏
@@ -345,6 +346,7 @@ public class JxlExcelHelper {
                 List<Field> fieldList = GetOrderedFiled.getOrderedField(fields);
                 //写标题
                 for (int col = 0; col < fieldList.size(); col++) {
+
                     String fieldName = fieldList.get(col).getDeclaredAnnotation(BeanFileAnnotation.class).aliasName();
                     fieldName = "".equals(fieldName) ? fieldList.get(col).getName() : fieldName;
                     if (mapColMaxWidth.get(col) == null) {
@@ -366,10 +368,12 @@ public class JxlExcelHelper {
                     t = list.get(j);
                     for (int colIndex = 0; colIndex < fieldList.size(); colIndex++) {    // 列 从第0列开始
                         String content = "";
-                        String fieldName = fieldList.get(colIndex).getName();
-                        String getMethodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-                        Method getMethod = t.getClass().getMethod(getMethodName, new Class[]{});
-                        Object value = getMethod.invoke(t, new Object[]{});
+//                        String fieldName = fieldList.get(colIndex).getName();
+//                        String getMethodName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+//                        Method getMethod = t.getClass().getMethod(getMethodName, new Class[]{});
+//                        Object value = getMethod.invoke(t, new Object[]{});
+                        Field field = fieldList.get(colIndex);
+                        Object value = GetOrderedFiled.getValueOfField(field,t);
                         content = null == value ? "" : value.toString();
                         sheet.addCell(new Label(colIndex + 0, currRowIndex, content, arial12format));
                         if (mapColMaxWidth.get(colIndex) == null) {

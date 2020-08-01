@@ -28,9 +28,8 @@ import com.learning.utils.BaseActivity;
 import com.learning.utils.DateHelper;
 import com.learning.utils.HttpUtil;
 import com.learning.utils.LogUtil;
+import com.learning.utils.MyApplication;
 import com.learning.utils.Utility;
-import com.xys.libzxing.zxing.activity.CaptureActivity;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -52,12 +51,12 @@ public class OddJobActivity extends BaseActivity {
     private EditText edOfManhours;
     private EditText edOfQuantities;
     private EditText edOfAmountOfMoney;
-    private EditText edOfEmpName;
+    //NiceSpinner niceSpinnerOfEmpName;
     private Button btnSubmitOddJob;
     private Button btn_back_to_MainActivity;
 
     private AppCompatSpinner appCompatSpinnerOfLineName;
-
+    private AppCompatSpinner appCompatSpinnerOfEmpName;
     private String v_particulars = "";
     private String v_labor_hours_str = "";
     private String v_quantities_str = "";
@@ -79,7 +78,7 @@ public class OddJobActivity extends BaseActivity {
         edOfQuantities = (EditText)findViewById(R.id.edOfQuantities);
         edOfAmountOfMoney = (EditText)findViewById(R.id.edOfAmountOfMoney);
         appCompatSpinnerOfLineName = (AppCompatSpinner)findViewById(R.id.appCompatSpinnerOfLineName);
-        edOfEmpName = (EditText)findViewById(R.id.edOfEmpName);
+        appCompatSpinnerOfEmpName = (AppCompatSpinner)findViewById(R.id.appCompatSpinnerOfEmpName);
         btnSubmitOddJob=(Button)findViewById(R.id.btnSubmitOddJob);
         btn_back_to_MainActivity = (Button)findViewById(R.id.btn_back_to_MainActivity);
 
@@ -90,12 +89,46 @@ public class OddJobActivity extends BaseActivity {
         editTextOfDatePicker.setOnFocusChangeListener(new editTextOfDatePicker_onFocusChangeListenerImpl());
         editTextOfDatePicker.setOnTouchListener(new editTextOfDatePicker_onTouchListenerImpl());
 
-        this.edOfEmpName.setOnClickListener(new edOfEmpName_OnClickListenerImpl());
         btnSubmitOddJob.setOnClickListener(new submitOddJob_OnClickListenerImpl());
         btn_back_to_MainActivity.setOnClickListener(new btn_back_to_MainActivity_onClickListenerImpl());
         //加载线体
         loadAllLineInfo();
-        appCompatSpinnerOfLineName.setOnItemSelectedListener(new appCompatSpinnerOfLineName_OnItemSelectedListenerImpl());
+        //加载所有的姓名
+        loadAllEmpName();
+
+    }
+
+    private void loadAllEmpName() {
+        HttpUtil.sendOKHttpRequest(getString(R.string.urlOfGetAllEmpInfosOrderByNamePinYinAsc), new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = response.body().string();
+                final List<String> list = Utility.getStringList(responseData);
+                list.add(0,null);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MyApplication.getContext(),android.R.layout.simple_spinner_dropdown_item,list);
+                            //niceSpinnerOfEmpName.attachDataSource(list);
+                            arrayAdapter.setDropDownViewResource(R.layout.item_drop_down);
+                            appCompatSpinnerOfEmpName.setAdapter(arrayAdapter);
+                            //niceSpinnerOfEmpName.setSelectedIndex(-1);
+                        }catch(Exception e){
+                            LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
+                        }
+
+
+                    }
+                });
+
+            }
+        });
     }
 
     /**
@@ -105,14 +138,15 @@ public class OddJobActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequest(getString(R.string.urlOfGetAllLineInfos), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseData = response.body().string();
                   final List<V_Line_Info> v_line_infoList     =Utility.getAllLinesInfoOrderByCreatedTime(responseData);
-                  if(v_line_infoList.size()==0){
+                  v_line_infoList.add(0,null);
+                  if(v_line_infoList.size()==1){
                       runOnUiThread(new Runnable() {
                           @Override
                           public void run() {
@@ -126,7 +160,8 @@ public class OddJobActivity extends BaseActivity {
                       public void run() {
                           ArrayAdapter<V_Line_Info> arrayAdapter = new ArrayAdapter<>(OddJobActivity.this,android.R.layout.simple_spinner_dropdown_item,v_line_infoList);
                           OddJobActivity.this.appCompatSpinnerOfLineName.setAdapter(arrayAdapter);
-                          appCompatSpinnerOfLineName.setSelection(-1);
+                          arrayAdapter.setDropDownViewResource(R.layout.item_drop_down);
+                          appCompatSpinnerOfLineName.setSelection(0,true);
                       }
                   });
 
@@ -138,7 +173,7 @@ public class OddJobActivity extends BaseActivity {
     private void lostFocus(){
         this.edOfParticulars.requestFocus();
         //this.editTextOfLineName.setShowSoftInputOnFocus(false);
-        this.edOfEmpName.setShowSoftInputOnFocus(false);
+        //this.edOfEmpName.setShowSoftInputOnFocus(false);
 
     }
 
@@ -160,25 +195,25 @@ public class OddJobActivity extends BaseActivity {
                 return;
             }
             //3.姓名
-            if("".equals(edOfEmpName.getText().toString())){
-                edOfEmpName.requestFocus();
+            if(null==appCompatSpinnerOfEmpName.getSelectedItem()){
+                appCompatSpinnerOfEmpName.requestFocus();
                 return;
             }
             //线体或地点
-            if("".equals(appCompatSpinnerOfLineName.getSelectedItem().toString())) {
+            if(null==appCompatSpinnerOfLineName.getSelectedItem()) {
                 appCompatSpinnerOfLineName.requestFocus();
-                return;
+                      return;
             }
             //先判断是否有相似数据.
             Map<String,String> getSimilarOddJobMap = new HashMap<String,String>();
             getSimilarOddJobMap.put(Get_Similar_Odd_Job_Enum.v_particulars.toString(),edOfParticulars.getText().toString());
             getSimilarOddJobMap.put(Get_Similar_Odd_Job_Enum.v_amount_of_money_str.toString(),edOfAmountOfMoney.getText().toString());
-            getSimilarOddJobMap.put(Get_Similar_Odd_Job_Enum.v_emp_name.toString(),edOfEmpName.getText().toString());
+            getSimilarOddJobMap.put(Get_Similar_Odd_Job_Enum.v_emp_name.toString(),appCompatSpinnerOfEmpName.getSelectedItem().toString());
             getSimilarOddJobMap.put(Get_Similar_Odd_Job_Enum.v_year_month_day_str.toString(),editTextOfDatePicker.getText().toString());
             HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetSimilarOddJobAction), getSimilarOddJobMap, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                    LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
                 }
 
                 @Override
@@ -234,7 +269,7 @@ public class OddJobActivity extends BaseActivity {
         map.put(Odd_Job_Enum.v_labor_hours_str.toString(),edOfManhours.getText().toString());
         map.put(Odd_Job_Enum.v_quantities_str.toString(),edOfQuantities.getText().toString());
         map.put(Odd_Job_Enum.v_amount_of_money_str.toString(),edOfAmountOfMoney.getText().toString());
-        map.put(Odd_Job_Enum.v_emp_name.toString(),edOfEmpName.getText().toString());
+        map.put(Odd_Job_Enum.v_emp_name.toString(),(appCompatSpinnerOfEmpName.getSelectedItem()).toString());
         map.put(Odd_Job_Enum.v_year_month_day_str.toString(),editTextOfDatePicker.getText().toString());
         Object o = appCompatSpinnerOfLineName.getSelectedItem();
         V_Line_Info v_line_info = (V_Line_Info)o;
@@ -242,7 +277,7 @@ public class OddJobActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfSaveOddJobAction), map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
 
             @Override
@@ -252,10 +287,12 @@ public class OddJobActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Snackbar.make(edOfEmpName,"已提交："+result+"行。",Snackbar.LENGTH_SHORT).show();//
+                        Snackbar.make(appCompatSpinnerOfEmpName,"已提交："+result+"行。",Snackbar.LENGTH_SHORT).show();//
                         //金额，姓名清空,定位到金额
+
                         OddJobActivity.this.edOfAmountOfMoney.setText("");
-                        OddJobActivity.this.edOfEmpName.setText("");
+                        //显示spinner
+                        appCompatSpinnerOfEmpName.setSelection(0,true);
                         OddJobActivity.this.edOfAmountOfMoney.requestFocus();
                     }
                 });
@@ -303,19 +340,13 @@ public class OddJobActivity extends BaseActivity {
     /**
      * 调用二维码扫描
      */
-    private class edOfEmpName_OnClickListenerImpl implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(OddJobActivity.this, CaptureActivity.class);
-            startActivityForResult(intent,REQUEST_GET_Name_By_QRCode);
 
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode){
+            /*
             case REQUEST_GET_Name_By_QRCode:
                 if(resultCode==RESULT_OK){
                     String returnedEmpName= data.getStringExtra("result");
@@ -350,6 +381,7 @@ public class OddJobActivity extends BaseActivity {
                     }
                 }
             break;
+             */
             default:break;
         }
     }
@@ -363,22 +395,6 @@ public class OddJobActivity extends BaseActivity {
         }
     }
 
-    private class appCompatSpinnerOfLineName_OnItemSelectedListenerImpl implements android.widget.AdapterView.OnItemSelectedListener {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-            if(isSpinnerFirst){
-                view.setVisibility(View.INVISIBLE);
-                //关闭开关
-                isSpinnerFirst = false;
-                return;
-            }
-            view.setVisibility(View.VISIBLE);
 
-        }
 
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    }
 }

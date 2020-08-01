@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheckedTextView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_of_alertDialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:lineSpacingMultiplier="1.2"
+    android:padding="12dp"
+    android:textSize="14sp"
+    android:gravity="center_vertical"
+    android:textColor="@color/black"
+    android:background="@color/skyblue"
+    android:checkMark="?android:attr/listChoiceIndicatorSingle"
+    android:text="你好"
+    />
+
+<!--    android:checked="false"-->
+<!--    android:checkMark="?android:attr/listChoiceIndicatorSingle"-->
+<!--    style="@style/checkboxStyle"-->
+
+
+<!--    android:id="@android:id/text1"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="?android:attr/listPreferredItemHeightSmall"-->
+<!--    android:textAppearance="?android:attr/textAppearanceListItemSmall"-->
+<!--    android:gravity="center_vertical"-->
+<!--    android:checkMark="?android:attr/listChoiceIndicatorSingle"-->
+<!--    android:paddingStart="?android:attr/listPreferredItemPaddingStart"-->
+<!--    android:paddingEnd="?android:attr/listPreferredItemPaddingEnd" -->

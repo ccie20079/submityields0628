@@ -32,4 +32,9 @@ public class V_Overtime_Detail {
         this.description = description;
         this.amountOfMoney = amountOfMoney;
     }
+
+    /**
+     * 在使用 (T) clazz.newInstance()时，需调用零参数构造器。
+     */
+    public V_Overtime_Detail(){};
 }

@@ -1,12 +1,15 @@
 package com.learning.gson;
 
+import com.learning.Adapter.SingleRecordOfGroupRVAdapter.ISingleRecordOfGroup;
+import com.learning.utils.StringHelper;
+
 /**
  * Package_name:   com.learning.gson
  * user:           Administrator
  * date:           2020/6/12
  * email:          ccie20079@126.com
  */
-public class V_Specific_Process {
+public class V_Specific_Process implements ISingleRecordOfGroup {
 
 
     private String seq_p_c_record;
@@ -54,4 +57,27 @@ public class V_Specific_Process {
     public void setLabour_cost(double labour_cost) {
         this.labour_cost = labour_cost;
     }
+
+    @Override
+    public String toString() {
+        return this.seq_p_c_record + "_" + this.summary_process + "_" + specific_process;
+    }
+
+    @Override
+    public String getSingleRecord() {
+        return this.seq_p_c_record +". " +this.summary_process
+                +"\r\n" + this.specific_process
+                +"\r\n" + StringHelper.padLeft("",51,' ') + String.valueOf(this.man_hours) + " S  " + this.labour_cost ;
+    }
+
+//    /**
+//     *
+//     * @return
+//     */
+//    public String toShow(){
+//        return "  "+this.seq_p_c_record +". " +this.summary_process
+//                +"\r\n  " + this.specific_process
+//                +"\r\n  " + StringHelper.padLeftToWholeScreenWidth(String.valueOf(this.man_hours) + " S  " + this.labour_cost ,20);
+//
+//    }
 }

@@ -3,23 +3,18 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/submit_piecework_quantities"
-            android:title="提交计件产量"
-            />
+            android:title="提交计件产量"/>
         <item
             android:id="@+id/submit_odd_amount_of_money"
-            android:title="提交零活金额"
-            />
+            android:title="提交零活金额"/>
         <item
             android:id="@+id/get_sals_to_excel"
-            android:title="工资查询及导出"
-            />
+            android:title="工资查询及导出"/>
         <item
             android:id="@+id/show_line_station_process"
-            android:title="款式_线体_工站_工序 分布"
-            />
+            android:title="款式_线体_工站_工序 分布"/>
         <item
             android:id="@+id/add_Emp_info"
-            android:title="新增员工"
-            />
+            android:title="员工注册"/>
     </group>
 </menu>

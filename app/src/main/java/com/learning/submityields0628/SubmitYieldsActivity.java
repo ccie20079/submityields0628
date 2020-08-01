@@ -54,7 +54,7 @@ public class SubmitYieldsActivity extends BaseActivity {
     private static final int REQUEST_GET_ALL_EMPS = 6;
     private static final int REQUEST_TO_GET_THE_SPECIFIC_PROCESS = 7;
     private static final int REQUEST_TO_GET_EMP_NAME_BY_QRCode = 8;
-
+    private static final int REQUEST_TO_GET_job_number_BY_Code128 = 9;
     private EditText editTextOfDatePicker = null;
     private EditText editTextOfStationName = null;
     private EditText editTextOfEmpName = null;
@@ -172,6 +172,36 @@ public class SubmitYieldsActivity extends BaseActivity {
                                     Toast.makeText(SubmitYieldsActivity.this,"无此用户，请尽快在PC端维护此用户信息！",Toast.LENGTH_SHORT).show();
                                     return;
                                 }
+                                SubmitYieldsActivity.this.editTextOfQuantitiesOfYieldsToSubmit.requestFocus();
+                            }
+                        });
+                    }
+                });
+                break;
+            //扫描工号一维码 获取
+            case REQUEST_TO_GET_job_number_BY_Code128:
+                String returnedJobNumber= data.getStringExtra("result");
+                this.editTextOfEmpName.setText(returnedJobNumber);
+                Map<String,String> map_job_number = new HashMap<String,String>();
+                map_job_number.put("job_number",returnedJobNumber);
+                //判断员工姓名是否存在
+                HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetEmpNameByJobNumber), map_job_number, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        LogUtil.d("SubmitYieldsActivity",e.toString());
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        final String responseData= response.body().string();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if("".equals(responseData)){
+                                    //无此用户，请尽快在PC端维护此用户信息。
+                                    Toast.makeText(SubmitYieldsActivity.this,"无此工号，请尽快在PC端或手机端，维护此用户信息！",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                SubmitYieldsActivity.this.editTextOfEmpName.setText(responseData);
                                 SubmitYieldsActivity.this.editTextOfQuantitiesOfYieldsToSubmit.requestFocus();
                             }
                         });
@@ -341,7 +371,7 @@ public class SubmitYieldsActivity extends BaseActivity {
             //进入条码扫描页面
             //进入全部员工信息获取页面
             Intent intent = new Intent(SubmitYieldsActivity.this, CaptureActivity.class);
-            startActivityForResult(intent,REQUEST_TO_GET_EMP_NAME_BY_QRCode);
+            startActivityForResult(intent,REQUEST_TO_GET_job_number_BY_Code128);
         }
     }
     /**
@@ -450,8 +480,7 @@ public class SubmitYieldsActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String responseData= response.body().string();
-                    Utility<V_Daily_Record> utility = new Utility<V_Daily_Record>();
-                    final ArrayList<V_Daily_Record> v_daily_recordList = utility.get_V_Daily_Record_List(responseData);
+                    final List<V_Daily_Record> v_daily_recordList = Utility.getListOfT(responseData,V_Daily_Record[].class);
                     //没有相似数据，进行提交
                     if(null == v_daily_recordList){
                         submitTheDailyRecord(yields_to_submit_map);
@@ -497,7 +526,7 @@ public class SubmitYieldsActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfSaveDailyRecordAction), map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
 
             @Override
@@ -507,6 +536,8 @@ public class SubmitYieldsActivity extends BaseActivity {
                     @Override
                     public void run() {
                         Snackbar.make(SubmitYieldsActivity.this.tv_productOrder,"已提交: "+Integer.parseInt(responseData)+"行。",Snackbar.LENGTH_SHORT).show();
+                        SubmitYieldsActivity.this.editTextOfStationName.setText("");
+                        SubmitYieldsActivity.this.editTextOfStationName.requestFocus();
                     }
                 });
             }

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -7,5 +7,25 @@
         <item name="colorPrimaryDark">@color/skyblue</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="alertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">@color/lightgray</item><!--所有的背景色  lightgrey-->
+        <!--        <item name="background">@color/lightgrey</item>-->
+    </style>
+
+    <style name="checkboxStyle" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="colorControlNormal">#E67154</item>
+        <item name="colorControlActivated">#03A9F4</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

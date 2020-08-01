@@ -63,7 +63,7 @@ public class ChooseSpecificProcessActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetTheSpecificProcesses), map, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {

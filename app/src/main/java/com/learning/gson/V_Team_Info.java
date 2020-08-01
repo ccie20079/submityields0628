@@ -31,6 +31,6 @@ public class V_Team_Info {
 
     @Override
     public String toString() {
-        return team_name + " 班长：" + monitor;
+        return team_name + "\r\n     班长:" + monitor;
     }
 }

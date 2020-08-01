@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.learning.gson.V_Specific_Process;
 import com.learning.submityields0628.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +33,7 @@ public class V_Specific_Process_Adapter extends RecyclerView.Adapter<V_Specific_
         if(mContext==null){
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_v_specific_process,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.v_specific_process_item,parent,false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }

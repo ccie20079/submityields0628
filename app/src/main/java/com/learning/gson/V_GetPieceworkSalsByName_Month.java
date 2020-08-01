@@ -1,5 +1,7 @@
 package com.learning.gson;
 
+import com.learning.utils.DecimalHelper;
+
 import java.io.Serializable;
 
 /**
@@ -73,7 +75,7 @@ public class V_GetPieceworkSalsByName_Month implements Serializable {
 	}
 
 	public double getAmount_of_money_sum() {
-		return amount_of_money_sum;
+		return DecimalHelper.getTwoDecimalPlacesReturnedDouble(amount_of_money_sum);
 	}
 
 	public void setAmount_of_money_sum(double amount_of_money_sum) {

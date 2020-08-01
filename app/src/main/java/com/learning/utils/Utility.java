@@ -1,8 +1,8 @@
 package com.learning.utils;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
+
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.learning.gson.Emp_Info;
 import com.learning.gson.MSG;
@@ -12,6 +12,7 @@ import com.learning.gson.V_GET_Similar_Odd_Job;
 import com.learning.gson.V_GetAllStylesDistribution;
 import com.learning.gson.V_GetOddSalsByName_Month;
 import com.learning.gson.V_GetPieceworkSalsByName_Month;
+import com.learning.gson.V_GetSamePYButWritting;
 import com.learning.gson.V_Line_Info;
 import com.learning.gson.V_Products_Info_Recent;
 import com.learning.gson.V_Products_Order;
@@ -20,100 +21,15 @@ import com.learning.gson.V_Style_Station_Process;
 import com.learning.gson.V_Team_Info;
 import com.learning.gson.V_Yields_Daily_Report;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.reflect.GenericSignatureFormatError;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Utility<T> {
-//    /**
-//     * 解析和处理服务器返回的省级数据
-//     * @param response
-//     * @return
-//     */
-//    public static boolean handleProvinceResponse(String response){
-//        if(!TextUtils.isEmpty(response)){
-//            try {
-//                JSONArray allProvinces = new JSONArray(response);
-//                for(int i = 0;i<allProvinces.length();i++){
-//                    JSONObject provinceObject = allProvinces.getJSONObject(i);
-//                    Province province = new Province();
-//                    province.setProvinceName(provinceObject.getString("name"));
-//                    province.setProvinceCode(provinceObject.getInt("id"));
-//                    province.save();        //保存于本地
-//                }
-//                return true;
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     *
-//     * @param response
-//     * @param provinceCode
-//     * @return
-//     */
-//    public static boolean handleCityResponse(String response,int provinceCode){
-//        if(!TextUtils.isEmpty(response)){
-//            try {
-//                JSONArray allCities = new JSONArray(response);
-//                for(int i = 0;i<allCities.length();i++){
-//                    JSONObject cityObject = allCities.getJSONObject(i);
-//                    City city = new City();
-//                    city.setCityCode(cityObject.getInt("id"));
-//                    city.setCityName(cityObject.getString("name"));
-//                    city.setProvinceCode(provinceCode);
-//                    city.save();
-//
-//                }
-//                return true;
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return false;
-//    }
-//    public static boolean handleCountyResponse(String response,int cityCode){
-//        if(TextUtils.isEmpty(response)) return false;
-//        try{
-//            JSONArray allCounties = new JSONArray(response);
-//            for(int i = 0;i<allCounties.length();i++){
-//                JSONObject countyObject = allCounties.getJSONObject(i);
-//                County county = new County();
-//                county.setCityCode(cityCode);
-//                county.setCountyName(countyObject.getString("name"));
-//                county.setWeatherId(countyObject.getString("weather_id"));
-//                county.save();
-//            }
-//            return true;
-//        }catch (JSONException e){
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
-//
-//    /**
-//     * 将返回的JSON数据解析成Weather实体类
-//     * @param response
-//     * @return
-//     */
-//    public static Weather handleWeatherResponse(String response){
-//        try{
-//            JSONObject jsonObject = new JSONObject(response);
-//            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-//            String weatherContent = jsonArray.getJSONObject(0).toString();
-//            return new Gson().fromJson(weatherContent,Weather.class);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+public class Utility {
+
     public static List<V_Line_Info> getAllLinesInfoOrderByCreatedTime(String jsonData){
         Gson gson = new Gson();
         List<V_Line_Info> v_line_infoList =gson.fromJson(jsonData,new TypeToken<List<V_Line_Info>>(){}.getType());
@@ -197,16 +113,80 @@ public class Utility<T> {
         return v_get_similar_odd_jobArrayList;
     }
 
+    /**
+     * 获取姓名拼音相同的 考勤记录
+     * @param string
+     * @return
+     */
+    public static List<V_GetSamePYButWritting> getSamePYButWrittingList(String string) {
+        Gson gson = new Gson();
+        List<V_GetSamePYButWritting> v_getSamePYButWrittingList = gson.fromJson(string,new TypeToken<List<V_GetSamePYButWritting>>(){}.getType());
+        return v_getSamePYButWrittingList;
+    }
     public static MSG getMSG(String responseData) {
         Gson gson = new Gson();
         MSG msg = gson.fromJson(responseData,new TypeToken<MSG>(){}.getType());
         return msg;
     }
 
-    public ArrayList<T> getListOfT(String jsonData){
+    /**
+     * 返回为字符串的List
+     * @param responseData
+     * @return
+     */
+    public static List<String> getStringList(String responseData) {
         Gson gson = new Gson();
-        ArrayList<T> resultListOfT = gson.fromJson(jsonData,new TypeToken<List<T>>(){}.getType());
-        return resultListOfT;
+        List<String> list = gson.fromJson(responseData,new TypeToken<List<String>>(){}.getType());
+        return list;
+    }
+
+    /**
+     * 获取单一对象
+     * @param json      其格式不为数组格式。
+     * @param classOfT  解析为一个类
+     * @param <T>
+     * @return
+     * @throws JsonParseException
+     */
+    public static <T> T getT(String json, Class<T> classOfT) throws JsonParseException {
+        Gson gson = new Gson();
+        return gson.fromJson(json, classOfT);
+    }
+
+    /**
+     * 获取列表
+     * @param jsonData  格式为数组
+     * @param clazz     使用数组泛型解析。
+     * @param <T>
+     * @return
+     */
+    public static <T> List<T> getListOfT(String jsonData,Class<T[]> clazz)  {
+        if("".equals(jsonData)) return new ArrayList<>();
+        Gson gson = new Gson();
+        T[] arrayOfT;
+        try{
+            arrayOfT =gson.fromJson(jsonData,clazz);
+        }
+        catch (Exception e){        //此处Catch  就不用
+            LogUtil.d("Utility",e.toString());
+            throw e;    //上抛异常
+        }
+        //Arrays$ArrayList which is an immutable list.
+        //Arrays.asList();
+        return  new ArrayList<>(Arrays.asList(arrayOfT));
+    }
+    /**
+     * 返回数组类型，用于在AlertDialog中显示。
+     * @param jsonData
+     * @param clazz
+     * @param <T>
+     * @return
+     * @throws JSONException
+     */
+    public static <T> T[]  getArrayOfT(String jsonData, Class<T[]> clazz) throws JSONException {
+        Gson gson = new Gson();
+        T[] arrayOfT=gson.fromJson(jsonData,clazz);
+        return arrayOfT;
     }
     public ArrayList<V_Daily_Record> get_V_Daily_Record_List(String jsonData){
         Gson gson = new Gson();

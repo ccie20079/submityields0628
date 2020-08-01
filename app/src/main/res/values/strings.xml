@@ -1,37 +1,70 @@
 <resources>
-    <string name="app_name">产量提交</string>
+    <string name="test">今天是2020-07-24， 中国踏上火星。</string>
+    <string name="app_name">产量提交与工资查询</string>
     <string name="str_submitted_info">西服 戗驳领 99  20-05-27 16:26\n\n裤子 裤脚 199   20-05-27 16:26</string>
     <string name="title_of_toolbar_submitYields">依线体报工</string>
     <string name="urlOfGetAllProductInfosRecent">http://192.168.1.113/Show_Products_Cost/GetAllProductInfosRecentAction!getAllProductsOrderInfo.action</string>
+    <!---获取所有款式在线体上的工序分布-->
     <string name="urlOfGetAllStylesDistributionAction">http://192.168.1.113/Show_Products_Cost/GetAllStylesDistributionAction!getAllStylesDistribution.action</string>
+    <!--条件： 款式，线体  获取 该款式的工序在该线体之工位上的详细分配。-->
     <string name="urlOfGetProcessesByLineAndStyleNameAction">http://192.168.1.113/Show_Products_Cost/GetProcessesByLineAndStyleNameAction!getProcessByLineAndStyleName.action</string>
     <string name="urlOfGetAllLineInfos">http://192.168.1.113/Show_Products_Cost/GetAllLineInfosAction!getAllLineNameAndMonitor.action</string>
-    <string name="urlOfGetAllTeamInfos">http://192.168.1.113/Show_Products_Cost/GetAllTeamInfosAction!getAllTeamsOrderByCreatedTimeDesc.action</string>
+    <!--获取所有组信息 注册页面-->
+    <string name="urlOfGetAllTeamInfos">http://192.168.1.113/Show_Products_Cost/GetAllTeamInfosAction!getAllTeamsOrderByCTimeDesc.action</string>
     <string name="urlOfGetAllEmpInfosWithPN_LineName">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosWithPN_LineName.action</string>
     <string name="urlOfGetAllEmpInfosWithPN">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosWithPN.action</string>
     <string name="urlOfGetAllEmpInfosL3M">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosL3MOrderByInsertedTimeASC.action</string>
     <string name="urlOfGetAllEmpInfos">http://192.168.1.113/Show_Products_Cost/GetAllEmpInfosRecentAction!getAllEmpInfosOrderByPINYINAsc.action</string>
+    <!--注册时，用于判断此用户是否已经存在-->
     <string name="urlOfGetEmpInfoAction">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!getEmpInfo.action</string>
-    <string name="urlOfGetEmpInfoByIMEI">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!getEmpInfoByIMEI.action</string>
+    <string name="urlOfGetEmpInfoByMAC">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!getEmpInfoByMAC.action</string>
+    <!--获取拼音相同的员工-->
     <string name="urlOfGetTheListOfSamePinYinButWrite">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!getTheListOfSamePinYinButWrite.action</string>
+    <!--新增新用户-->
     <string name="urlOfSaveEmpInfo">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!saveEmpInfo.action</string>
+    <string name="urlOfGetAllEmpInfosOrderByNamePinYinAsc">http://192.168.1.113/Show_Products_Cost/GetEmpInfoAction!getAllEmpInfosOrderByNamePinYinAsc.action</string>
     <string name="urlOfGetTheSpecificProcesses">http://192.168.1.113/Show_Products_Cost/GetTheSpecificProcessesOfThePNAction!getTheSpecificProcesses.action</string>
     <string name="urlOfYieldsDialyRecordSubmit">http://192.168.1.113/Show_Products_Cost/Yields_Daily_Record_Submit_Action!yields_Daily_Record_Submit.action</string>
     <string name="urlOfGetProcessByPN_Line_StationAction">http://192.168.1.113/Show_Products_Cost/GetProcessByPN_Line_Station_Action!getProcessByPN_Line_Station.action</string>
     <string name="urlOfJudgeLineAndStationName">http://192.168.1.113/Show_Products_Cost/GetProcessByPN_Line_Station_Action!judgeLineAndStationName.action</string>
     <string name="urlOfIfExistsTheEmpNameAction">http://192.168.1.113/Show_Products_Cost/IfExistsTheEmpNameAction!ifExistsTheEmpName.action</string>
+    <string name="urlOfGetEmpNameByJobNumber">http://192.168.1.113/Show_Products_Cost/IfExistsTheEmpNameAction!getEmpNameByJobNumber.action</string>
+    <!-- 用于判断AR_Summary_Final中是否有同名用户。-->
+    <string name="urlOfIfExistsSameNameInAR_S_F">http://192.168.1.113/Show_Products_Cost/CorrelateEmpInfoWithARSummaryFinalAction!IfExistsSameNameInAR_S_F.action</string>
+    <!--用于获取姓名拼音相同，但书写不同的记录  返回： List<V_GetSamePYButWritting>-->
+    <string name="urlOfGetSamePYButWritting">http://192.168.1.113/Show_Products_Cost/CorrelateEmpInfoWithARSummaryFinalAction!getSamePYButWritting.action</string>
+    <!-- 用户选择拼音相同的考勤人员记录，emp_info中对应的考勤字段更新。  返回 1或0-->
+    <string name="urlOfUpdateEmpInfoByASF_JobNumber">http://192.168.1.113/Show_Products_Cost/CorrelateEmpInfoWithARSummaryFinalAction!updateEmpInfoByASF_JobNumber.action</string>
     <string name="urlOfSaveDailyRecordAction">http://192.168.1.113/Show_Products_Cost/SaveDailyRecordAction!saveDailyRecord.action</string>
     <string name="urlOfGetDRecordByPN_EmpName_DayAction">http://192.168.1.113/Show_Products_Cost/GetDRecordByPN_EmpName_DayAction!getDRecordByPN_EmpName_Day.action</string>
     <string name="urlOfGetSameDRecordAction">http://192.168.1.113/Show_Products_Cost/GetSameDRecordAction!getSameDRecord.action</string>
     <string name="urlOfSaveOddJobAction">http://192.168.1.113/Show_Products_Cost/SaveOddJobAction!saveOddJob.action</string>
     <string name="urlOfGetSimilarOddJobAction">http://192.168.1.113/Show_Products_Cost/GetSimilarOddJobAction!getSimilarOddJob.action</string>
+    <!--获取计件 工资-->
     <string name="urlOfGetPieceworkSalsByName_Month">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getPieceworkSalsByName_Month.action</string>
     <string name="urlOfGetOddSalsByName_Month">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getOddSalsByName_Month.action</string>
     <string name="urlOfGetOvertimePayByName_Month">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getOvertimePayByName_Month.action</string>
-    <string name="urlOfGetAllOverTimeByIMEI_MonthStr">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getAllOverTimeByIMEI_MonthStr.action</string>
-
-    <string name="urlOfGetEmpNameByIMEIAction">http://192.168.1.113/Show_Products_Cost/GetEmpNameByIMEIAction!getEmpNameByIMEI.action</string>
+    <string name="urlOfGetAllOverTimeByMAC_MonthStr">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getAllOverTimeByMAC_MonthStr.action</string>
+    <string name="urlOfGetEmpNameByMACAction">http://192.168.1.113/Show_Products_Cost/GetEmpNameByMACAction!getEmpNameByMAC.action</string>
     <string name="urlOfGetPieceworkTotalSalsByN_M">http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getPieceworkTotalSalsByN_M.action</string>
     <string name="urlOfGetOddTotalSalsByN_M"> http://192.168.1.113/Show_Products_Cost/GetSalsByName_MonthAction!getOddTotalSalsByN_M.action</string>
     <string name="urlOfGetSalsExcelByName_MonthAction">http://192.168.1.113/Show_Products_Cost/GetSalsExcelByName_MonthAction!getPieceworkSalsExcelByName_Month.action</string>
+    <string name="title_activity_main2">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_get_sals_by_name__month">GetSalsByName_MonthActivity</string>
+    <string name="tab_text_1">计件工资</string>
+    <string name="tab_text_2">零活工资</string>
+    <string name = "tab_text_3">考勤工时</string>
 </resources>

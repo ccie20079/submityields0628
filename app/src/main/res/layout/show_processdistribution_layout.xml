@@ -1,38 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/skyblue">
-
-    <LinearLayout
+<!--    CoordinatorLayout采用FrameLayout的布局方式-->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="horizontal"
-        android:background="@color/skyblue"
-        android:layout_gravity="right">
-        <TextView
-            android:id="@+id/tv_backToDrawerLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_back"/>
-        <TextView
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="工序_线体分布"
-            android:textSize="14sp"
-            android:gravity="center|right"
-            android:textAlignment="center"/>
-    </LinearLayout>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_of_style_distribution"
+            <TextView
+                android:id="@+id/tv_of_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:text="工序与线体 分布"
+                android:gravity="center|right"
+                android:paddingRight="60dp"/>
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+<!--将Toobar放入AppBarLayout中可以让Toolbar显示-->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-     >
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
-
-
-
-</LinearLayout>
+        <!--layout_behavior属性自recylerViewer移动至外层-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_of_style_distribution"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+<!--    app:layout_behavior="@string/appbar_scrolling_view_behavior" 可以让recyclerView向下偏移一个toolBar高度，避免重叠。-->
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

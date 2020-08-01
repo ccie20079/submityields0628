@@ -1,3 +1,7 @@
+include ':autolayout-widget'
+include ':sample'
+include ':widgetsample'
+include ':autolayout'
 include ':libzxing'
 include ':app'
 rootProject.name = "submityields0628"

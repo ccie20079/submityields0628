@@ -1,21 +1,16 @@
 package com.learning.submityields0628;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.learning.gson.Emp_Info;
@@ -24,13 +19,13 @@ import com.learning.utils.BaseActivity;
 import com.learning.utils.HttpUtil;
 import com.learning.utils.LogUtil;
 import com.learning.utils.MyApplication;
+import com.learning.utils.ShowAlertDialog;
 import com.learning.utils.Utility;
-import com.permissionx.guolindev.PermissionX;
-import com.permissionx.guolindev.callback.RequestCallback;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,29 +36,42 @@ import okhttp3.Response;
 
 public class AddEmpActivity extends BaseActivity {
     TextView tv_backToDrawerLayout;
-    TextView tv_teamName;
     Spinner spinner_teamName;
     EditText ed_empName;
-    TextView tv_IMEI;
-    FloatingActionButton floatingActionButton_addEmpInfo;
+    TextView tv_mac;
+    FloatingActionButton fabtn_addEmpInfo;
     TextView tv_result;
     Map<String,String> map  = new HashMap<>();
+    List<V_Team_Info> v_team_infoList;
+    ArrayAdapter<V_Team_Info> arrayAdapter_v_team_info = null;
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_emp);
-
         tv_backToDrawerLayout = (TextView)findViewById(R.id.tv_backToDrawerLayout);
         tv_backToDrawerLayout.setOnClickListener(new tv_backToDrawerLayout_OnClickListenerImpl());
-        tv_teamName = (TextView)findViewById(R.id.tv_teamName);
-        spinner_teamName=(Spinner)findViewById(R.id.spinner_teamName);
-        ed_empName =(EditText)findViewById(R.id. ed_empName);
-        tv_IMEI =( TextView)findViewById(R.id.tv_IMEI);
-        floatingActionButton_addEmpInfo=(FloatingActionButton)findViewById(R.id.floatingActionButton_addEmpInfo);
-        tv_result=(TextView)findViewById(R.id.tv_result);
-        floatingActionButton_addEmpInfo.setOnClickListener(new floatingActionButton_addEmpInfo_OnClickListenerImpl());
+        spinner_teamName=(Spinner) findViewById(R.id.spinner_teamName);
 
-        getIMEI();
+        ed_empName =(EditText)findViewById(R.id. ed_empName);
+        tv_mac =( TextView)findViewById(R.id.tv_mac);
+
+        fabtn_addEmpInfo=(FloatingActionButton)findViewById(R.id.fabtn_addEmpInfo);
+        tv_result=(TextView)findViewById(R.id.tv_result);
+        fabtn_addEmpInfo.setOnClickListener(new fabtn_addEmpInfo_OnClickListenerImpl());
+
+        spinner_teamName.setOnItemSelectedListener(new spinner_teamName_OnItemSelectedListenerImpl());
+
+        if(MyApplication.getEmp_info()!=null){
+            tv_result.setText(MyApplication.getEmp_info().toString());
+            ed_empName.setEnabled(false);
+            fabtn_addEmpInfo.setEnabled(false);
+        }else{
+            tv_result.setText("");
+            ed_empName.setEnabled(true);
+            fabtn_addEmpInfo.setEnabled(true);
+        }
+        tv_mac.setText(MyApplication.MAC);
         //获取所有的组
         getAllTeamInfo();
 
@@ -72,86 +80,27 @@ public class AddEmpActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequest(getString(R.string.urlOfGetAllTeamInfos), new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
-
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseDate = response.body().string();
-                List<V_Team_Info> v_team_infoList = Utility.getAllTeamsInfoOrderByCreatedTime(responseDate);
-                final ArrayAdapter<V_Team_Info> arrayAdapter = new ArrayAdapter<V_Team_Info>(MyApplication.getContext(),android.R.layout.simple_spinner_dropdown_item,v_team_infoList);
+                v_team_infoList= Utility.getListOfT(responseDate,V_Team_Info[].class);
+                v_team_infoList.add(0,null);
+                arrayAdapter_v_team_info = new ArrayAdapter<>(MyApplication.getContext(),R.layout.spinner_item,v_team_infoList);
+                arrayAdapter_v_team_info.setDropDownViewResource(R.layout.spinner_dropdown_style);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        spinner_teamName.setAdapter(arrayAdapter);
+                        spinner_teamName.setAdapter(arrayAdapter_v_team_info);
+                        spinner_teamName.setSelection(0,true);
                     }
                 });
-            }
-        });
 
-    }
-    private void getIMEI() {
-        final TelephonyManager tm = (TelephonyManager) this.getSystemService(getApplication().TELEPHONY_SERVICE);
-        PermissionX.init(this).permissions(Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_NUMBERS,Manifest.permission.READ_PHONE_STATE).request(new RequestCallback() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onResult(boolean allGranted, List<String> grantedList, List<String> deniedList) {
-                if (allGranted) {
-                    final String Imei = tm.getImei(0);
-                    tv_IMEI.setText(Imei);
-                    //判断此IMEI是否已经注册：
-                    map.put("imei",Imei);
-                    judgeIfExistsIMEI(map);
-                    return;
-                }else{
-                    Toast.makeText(MyApplication.getContext(),"您拒绝了权限的获取,将可能无法获取您的IMEI.",Toast.LENGTH_SHORT).show();
-                    return;
-                }
             }
         });
     }
-    private void judgeIfExistsIMEI(Map<String, String> map) {
-        HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetEmpInfoByIMEI), map, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
-            }
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responseData = response.body().string();
-                final Emp_Info v_emp_info;
 
-                v_emp_info= Utility.getEmpInfo(responseData);
-                if(v_emp_info!=null){
-                    //已经存在该用户。
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AddEmpActivity.this.ed_empName.setEnabled(false);
-                            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(AddEmpActivity.this);
-                            dialog.setTitle("此IMEI已注册:" );
-                            dialog.setCancelable(false);
-                            dialog.setItems(new String[]{v_emp_info.toString()}, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            });
-                            //dialog.setView(R.layout.alert_dialog_background);
-                            dialog.show();
-                        }
-                    });
-                }
-            }
-        });
-    }
     private class tv_backToDrawerLayout_OnClickListenerImpl implements View.OnClickListener {
         @Override
         public void onClick(View view) {
@@ -164,53 +113,38 @@ public class AddEmpActivity extends BaseActivity {
     /**
      *
      */
-    private class floatingActionButton_addEmpInfo_OnClickListenerImpl implements View.OnClickListener {
+    private class fabtn_addEmpInfo_OnClickListenerImpl implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if("".equals(tv_teamName.getText().toString())){
+            if(MyApplication.getEmp_info()!=null) return;
+            if(null==spinner_teamName.getSelectedItem()){
                 return;
             }
             if("".equals(ed_empName.getText().toString())) return;
             map.put("emp_name",ed_empName.getText().toString());
+            map.put("mac",tv_mac.getText().toString());
             //判断有无同名用户？
-            judgeIfExistsSameEmpName(map );
-
+            judgeIfExistsSameEmpName(map);
         }
     }
     private void judgeIfExistsSameEmpName(final Map<String,String> map ) {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetEmpInfoAction), map, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responseDate = null;
-                responseDate = response.body().string();
-                final Emp_Info v_emp_info = Utility.getEmpInfo(responseDate);
-                if(null!=v_emp_info){
+                String responseData = response.body().string();
+                final Emp_Info emp_info = Utility.getT(responseData,Emp_Info.class);
+                if(null!=emp_info){
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             AddEmpActivity.this.ed_empName.setEnabled(false);
-                            android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(AddEmpActivity.this);
-                            dialog.setTitle("此姓名已注册:" );
-                            dialog.setCancelable(false);
-                            dialog.setItems(new String[]{v_emp_info.toString()}, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-
-                            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            });
-                            //dialog.setView(R.layout.alert_dialog_background);
-                            dialog.show();
+                            List<Emp_Info> list = new ArrayList();
+                            list.add(emp_info);
+                            ShowAlertDialog.show(AddEmpActivity.this,"此姓名已注册！", list,  "确定");
                         }
                     });
                     return;
@@ -225,50 +159,29 @@ public class AddEmpActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfGetTheListOfSamePinYinButWrite), map, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
-
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responseDate = response.body().string();
-                List<Emp_Info> emp_infoList = Utility.getEmpInfos(responseDate);
+                String responseData = response.body().string();
+                final List<Emp_Info> emp_infoList = Utility.getListOfT(responseData,Emp_Info[].class);
                 if(0!=emp_infoList.size()){
-                    //已经存在该用户。
-                    final CharSequence[] charSequences = emp_infoList.toArray(new CharSequence[emp_infoList.size()]);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                             android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(AddEmpActivity.this);
-                            dialog.setTitle("存在拼音相同的用户:" );
-                            dialog.setCancelable(false);
-                            dialog.setItems(charSequences, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            });
-                            dialog.setPositiveButton("继续", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    saveEmpInfo(map);
-                                    return;
-                                }
-                            });
-                            dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            });
-                            //dialog.setView(R.layout.alert_dialog_background);
-                            dialog.show();
+                            ShowAlertDialog.show(AddEmpActivity.this, "存在拼音相同的记录：",
+                                    emp_infoList,
+                                   "继续新增", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            //获取已经选择的
+                                            saveEmpInfo(map);
+                                        }
+                                    });
                         }
                     });
                     return;
                 }
-                V_Team_Info v_team_info = (V_Team_Info)spinner_teamName.getSelectedItem();
-                map.put("team_name",v_team_info.getTeam_name());
-                map.put("monitor",v_team_info.getMonitor());
                 saveEmpInfo(map);
             }
         });
@@ -277,9 +190,8 @@ public class AddEmpActivity extends BaseActivity {
         HttpUtil.sendOKHttpRequestWithPostMethod(getString(R.string.urlOfSaveEmpInfo), map, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                LogUtil.d(getTheTAGOfTheCurrentInstance(),e.toString());
+                LogUtil.d(getTheTAGOfTheCurrActivity(),e.toString());
             }
-
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String responseData =  response.body().string();
@@ -291,10 +203,26 @@ public class AddEmpActivity extends BaseActivity {
                             tv_result.setText("保存失败！");
                             return;
                         }
+                        //保存成功！
                         tv_result.setText(empInfo.toString());
+                        MyApplication.setEmp_info( empInfo);
                     }
                 });
             }
         });
+    }
+
+    private class spinner_teamName_OnItemSelectedListenerImpl implements android.widget.AdapterView.OnItemSelectedListener {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+            if(null==v_team_infoList.get(position))
+                return;
+            V_Team_Info v_team_info = (V_Team_Info)spinner_teamName.getSelectedItem();
+            map.put("team_name",v_team_info.getTeam_name());
+            map.put("monitor",v_team_info.getMonitor());
+        }
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
     }
 }

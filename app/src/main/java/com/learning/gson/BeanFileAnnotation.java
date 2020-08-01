@@ -15,13 +15,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BeanFileAnnotation {
     /**
-     * 标注该属性的顺序
      * @return 该属性的顺序
      */
     int order();
 
     /**
-     * 字段别名
      * @return  返回字段的别名
      */
     String aliasName();

@@ -180,7 +180,9 @@
                 android:layout_weight="2.7"
                 android:gravity="bottom|center"
                 android:textSize="15sp"
-                android:hint="必选"/>
+                android:hint="必选"
+                android:textAlignment="center"
+                android:spinnerMode="dialog"/>
 
         </LinearLayout>
         <LinearLayout
@@ -196,15 +198,27 @@
                 android:textSize="17sp"
                 android:textAlignment="center"
                 />
-            <EditText
-                android:id="@+id/edOfEmpName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2.7"
-                android:gravity="bottom|center"
-                android:textSize="15sp"
-                android:hint="必填"/>
+<!--            <EditText-->
+<!--                android:id="@+id/edOfEmpName"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="2.7"-->
+<!--                android:gravity="bottom|center"-->
+<!--                android:textSize="15sp"-->
+<!--                android:hint="必填"/>-->
 
+            <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/appCompatSpinnerOfEmpName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2.7"
+                    android:gravity="bottom|center"
+                    android:textSize="15sp"
+                    android:hint="必选"
+                    android:textAlignment="center"
+                    android:spinnerMode="dialog"
+                    android:backgroundTint="@color/skyblue"
+                       />
         </LinearLayout>
     </LinearLayout>
 

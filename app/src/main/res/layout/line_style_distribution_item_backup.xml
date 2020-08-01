@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="112dp"
+    android:orientation="horizontal"
+    android:background="@color/skyblue"
+    >
+    <!--在RecyclerView中，item的布局height要设置为wrap_content-->
+    <ImageView
+        android:id="@+id/imgViewOfTheProducts"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="5dp"
+        />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2.7"
+        android:orientation="vertical"
+        android:gravity="right"
+        android:layout_marginRight="20dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_marginRight="15dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+
+                android:gravity="right|bottom"
+                android:text="款式："
+                android:textAlignment="gravity"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_style_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|bottom"
+                android:textAlignment="gravity"
+                android:text="款式"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="right"
+            android:layout_marginRight="15dp">
+            <TextView
+                android:id="@+id/tv_line_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|bottom"
+                android:textAlignment="gravity"
+                android:text="线体名"
+                android:textSize="14sp"
+                android:layout_marginLeft="5dp"/>
+            <TextView
+                android:id="@+id/tv_station_num"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right|bottom"
+                android:textAlignment="gravity"
+                android:text="站位数目"
+                android:textSize="14sp"
+                android:layout_marginLeft="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

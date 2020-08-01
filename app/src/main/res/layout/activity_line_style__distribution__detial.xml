@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/skyblue"
+    android:gravity="right">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal"
+        android:background="@color/skyblue"
+        android:gravity="right"
+        android:layout_gravity="right">
+        <TextView
+            android:id="@+id/tv_backToDrawerLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_arrow_back"
+            android:layout_marginLeft="15dp"/>
+        <TextView
+            android:id="@+id/tv_line_name"
+            android:layout_width="0dp"
+            android:layout_weight="40"
+            android:layout_height="match_parent"
+            android:text="线体"
+            android:textSize="14sp"
+            android:gravity="right|center"
+            android:layout_marginRight="3dp"/>
+        <TextView
+            android:id="@+id/tv_style_name"
+            android:layout_width="0dp"
+            android:layout_weight="60"
+            android:layout_height="match_parent"
+            android:text="款式"
+            android:textSize="14sp"
+            android:gravity="center|end"
+            android:layout_marginRight="5dp"/>
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_v_style_station_process"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

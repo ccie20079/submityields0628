@@ -16,6 +16,7 @@ public class TimeHelper {
         return new SimpleDateFormat("yyMMddHHmmss").format(new Date());
     }
     public static String getTimeStr(Date inserted_time,String pattern){
+        if(inserted_time==null) inserted_time = new Date(0);
         return new SimpleDateFormat(pattern).format(inserted_time);
     }
     public static String getSimplifiedTimeStr(Date inserted_time) {
